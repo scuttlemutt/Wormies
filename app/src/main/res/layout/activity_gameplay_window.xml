@@ -10,49 +10,60 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jon_2.wormies.GameplayWindow">
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="390dp"
+    <TextView
+        android:text="dir: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dirView"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/upButton" />
-
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/downButton"
-            android:layout_row="1"
-            android:layout_column="0" />
-
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button11"
-            android:layout_row="0"
-            android:layout_column="10" />
-
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button10" />
-    </GridLayout>
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="Score: 0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/scoreText"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="82dp"
-        android:id="@+id/scoreView" />
+        android:id="@+id/scoreView"
+        android:layout_below="@+id/dirView"
+        android:layout_alignParentStart="true" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="332dp"
+        android:layout_below="@+id/scoreView"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="UP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/upButton"
+            android:onClick="setDirection" />
+
+        <Button
+            android:text="DOWN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/downButton"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:onClick="setDirection" />
+
+        <Button
+            android:text="LEFT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/leftButton"
+            android:layout_row="0"
+            android:layout_column="10"
+            android:onClick="setDirection" />
+
+        <Button
+            android:text="RIGHT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rightButton"
+            android:onClick="setDirection" />
+    </GridLayout>
 
 </RelativeLayout>
