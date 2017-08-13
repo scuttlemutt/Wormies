@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameplayWindow extends AppCompatActivity {
@@ -17,6 +18,8 @@ public class GameplayWindow extends AppCompatActivity {
     }
 
     int score;
+    int arenaX;
+    int arenaY;
     Direction wormDirection;
     Point  wormPosition;
     Point foodLocation;
@@ -28,12 +31,25 @@ public class GameplayWindow extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay_window);
 
+        /*
+        Deque<Point> testQueue = new ArrayDeque();
+        testQueue.add(new Point(25,25));
+        Point foo = new Point(25,25);
+        Point foo2 = new Point(20,20);
+        System.out.println("Does this contain 2525?" +testQueue.contains(foo));
+        System.out.println("Does this contain 2020?" +testQueue.contains(foo2));
+
+        */
+
        // startGame();
         wormHistory = new ArrayDeque();
 
+        arenaX = 15;
+        arenaY = 10;
         wormHistory.add( new Point(10,10));
         wormPosition = new Point(10,10);
         wormDirection = Direction.DOWN;
+        placeFood();
         score=0;
 
 
@@ -64,11 +80,15 @@ public class GameplayWindow extends AppCompatActivity {
 
     private void update() {
 
-        score++;
         TextView scoreView= (TextView) findViewById(R.id.scoreView);
         scoreView.setText("Score:" +score);
         TextView dirView= (TextView) findViewById(R.id.dirView);
         dirView.setText("dir:" +wormDirection.toString());
+        TextView posView= (TextView) findViewById(R.id.posView);
+        posView.setText("PosL"+wormPosition.toString());
+        TextView foodView= (TextView) findViewById(R.id.foodView);
+        foodView.setText("PosL"+foodLocation.toString());
+
     }
 
     public void setDirection(View view){
@@ -99,12 +119,16 @@ public class GameplayWindow extends AppCompatActivity {
         switch (wormDirection){
             case UP:
                 wormPosition.set(wormPosition.x,wormPosition.y+1);
+                break;
             case DOWN:
                 wormPosition.set(wormPosition.x,wormPosition.y-1);
+                break;
             case LEFT:
                 wormPosition.set(wormPosition.x-1,wormPosition.y);
+                break;
             case RIGHT:
                 wormPosition.set(wormPosition.x+1,wormPosition.y);
+                break;
 
         }
 
@@ -112,15 +136,44 @@ public class GameplayWindow extends AppCompatActivity {
             wormHistory.removeLast();
         }
 
+        //if your current position is an area containing your tail, game over
         for (Point e : wormHistory) {
             if(e.toString()==wormPosition.toString()) gameOver();
         }
+
+        //if your current position is out of bounds, game over
+        if(wormPosition.x>arenaX||wormPosition.x<0||wormPosition.y>arenaY||wormPosition.y<0) gameOver();
+
+        //if you entered the food space, expand worm
+        if(wormPosition.equals(foodLocation)){
+            score++;
+            placeFood();
+        }
+
 
     }
 
 
     public void gameOver(){
+        System.out.println("Dead "+wormPosition);
+    }
 
+    public void placeFood(){
+        Point foodPoint = new Point(0,0);
+        boolean valid=false;
+        while(valid==false){
+            foodPoint= new Point(ThreadLocalRandom.current().nextInt(0, arenaX + 1), ThreadLocalRandom.current().nextInt(0, arenaY + 1));
+            valid=validFood(foodPoint);
+        }
+        foodLocation=foodPoint;
+    }
+
+    boolean validFood(Point foodPoint)
+    {
+        if(foodPoint.toString()==wormPosition.toString()) return false;
+        else if (wormHistory.contains(foodPoint)) return false;
+
+        return true;
     }
 
 }
