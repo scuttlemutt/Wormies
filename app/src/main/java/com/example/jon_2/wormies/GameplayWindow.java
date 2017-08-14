@@ -1,5 +1,6 @@
 package com.example.jon_2.wormies;
 
+
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.concurrent.ThreadLocalRandom;
-
 
 public class GameplayWindow extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class GameplayWindow extends AppCompatActivity {
     int arenaX;
     int arenaY;
     Direction wormDirection;
-    Point  wormPosition;
+    Point wormPosition;
     Point foodLocation;
     Deque<Point> wormHistory;
 
@@ -44,10 +44,10 @@ public class GameplayWindow extends AppCompatActivity {
        // startGame();
         wormHistory = new ArrayDeque();
 
-        arenaX = 15;
-        arenaY = 10;
-        wormHistory.add( new Point(10,10));
+        arenaX = 5;
+        arenaY = 5;
         wormPosition = new Point(10,10);
+       // wormHistory.add(new Point(wormPosition.x,wormPosition.y));
         wormDirection = Direction.DOWN;
         placeFood();
         score=0;
@@ -89,6 +89,13 @@ public class GameplayWindow extends AppCompatActivity {
         TextView foodView= (TextView) findViewById(R.id.foodView);
         foodView.setText("PosL"+foodLocation.toString());
 
+        TextView historyView= (TextView) findViewById(R.id.historyView);
+        String s = "";
+        for (Point e : wormHistory) {
+            s += e.toString() + "\n";
+        }
+        historyView.setText(s);
+
     }
 
     public void setDirection(View view){
@@ -114,7 +121,8 @@ public class GameplayWindow extends AppCompatActivity {
     //Die if current position is occupied by a worm section or wall
     public void advance(){
 
-
+        //Add last position to tail
+        wormHistory.add(new Point(wormPosition.x,wormPosition.y));
 
         switch (wormDirection){
             case UP:
@@ -132,8 +140,9 @@ public class GameplayWindow extends AppCompatActivity {
 
         }
 
+        //if the tail is larger than your score, erase the last segment of tail
         if(wormHistory.size()-1>score){
-            wormHistory.removeLast();
+            wormHistory.removeFirst();
         }
 
         //if your current position is an area containing your tail, game over
